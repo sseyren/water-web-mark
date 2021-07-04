@@ -1,7 +1,12 @@
 <script>
+function wwm_absolutePath(wwm_href) {
+  var wwm_link = document.createElement("a");
+  wwm_link.href = wwm_href;
+  return wwm_link.href;
+}
 wwm_images = document.getElementsByTagName("img");
 for (var wwm_i = 0; wwm_i < wwm_images.length; wwm_i++) {
-  wwm_new_href = encodeURIComponent(wwm_images[wwm_i].src);
-  wwm_images[wwm_i].src = "{{ hostname }}{{ endpoint }}/image.png?url=" + wwm_new_href + "&{{ query }}";
+  wwm_new_src = encodeURIComponent(wwm_absolutePath(wwm_images[wwm_i].src));
+  wwm_images[wwm_i].src = "{{ hostname }}{{ endpoint }}/processed.png?url=" + wwm_new_src + "&{{ query }}";
 }
 </script>
