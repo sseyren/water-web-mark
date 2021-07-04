@@ -2,6 +2,10 @@ from enum import Enum
 import cv2 as cv
 import numpy as np
 
+class WatermarkType(Enum):
+    TEXT = "text"
+    IMAGE = "image"
+
 class TextPosition(Enum):
     TOP_LEFT = "top_left"
     TOP = "top"
