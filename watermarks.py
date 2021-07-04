@@ -22,12 +22,12 @@ class Color:
     BLACK = (0,0,0)
 
 def _find_optimum_scale(img_size:tuple,
-                       text:str,
-                       font,
-                       thickness,
-                       size_ratio=0.8,
-                       step=0.05,
-                       ):
+                        text:str,
+                        font,
+                        thickness,
+                        size_ratio=0.8,
+                        step=0.05,
+                        ):
     scale = 0
     text_size = 0, 0
     while all(text_size[i] < (img_size[i] * size_ratio) for i in [0,1]):
@@ -62,7 +62,7 @@ def one_text(bstring:bytes,
              size_ratio=0.8,
              alpha=0.5,
              ):
-    image = cv.imdecode(np.fromstring(bstring, np.uint8), cv.IMREAD_ANYCOLOR)
+    image = cv.imdecode(np.fromstring(bstring, np.uint8), cv.IMREAD_UNCHANGED)
     image_height, image_width, _ = image.shape
     image_size = image_width, image_height
 
