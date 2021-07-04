@@ -1,5 +1,5 @@
 from flask import Flask, Response, render_template, abort, request
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 import requests
 
 import watermarks
@@ -7,18 +7,28 @@ from watermarks import WatermarkType, TextPosition
 
 app = Flask(__name__)
 
+def generate_embed_js(watermark_type:WatermarkType, hostname:str, params:dict):
+    template = app.jinja_env.get_template("js_code.jinja")
+
+    return template.render(
+        hostname=hostname,
+        endpoint=f"/watermark/{watermark_type.value}",
+        query=urlencode(params),
+    )
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    watermark_type = WatermarkType.TEXT
     params = {
-        "type": WatermarkType.TEXT.value,
         "position": TextPosition.CENTER.value,
         "size_ratio": 0.8,
         "alpha": 0.5,
     }
+    generated_code = None
 
     if request.method == "POST":
         try:
-            params["type"] = WatermarkType(request.form.get("type")).value
+            watermark_type = WatermarkType(request.form.get("type"))
         except ValueError:
             pass
 
@@ -41,13 +51,21 @@ def index():
         except ValueError:
             pass
 
+        generated_code = generate_embed_js(
+            watermark_type, request.host_url[0:-1], params)
+
     return render_template(
         "index.jinja",
+        watermark_type=watermark_type.value,
         params=params,
+        generated_code=generated_code,
         TextPosition=TextPosition
     )
 
-@app.route("/watermark/text/<file_name>", methods=["GET"])
+@app.route(
+    f"/watermark/{WatermarkType.TEXT.value}/<file_name>",
+    methods=["GET"]
+)
 def watermark_text(file_name):
     image_url = urlparse(request.args.get("url"))
     if not image_url.geturl():
