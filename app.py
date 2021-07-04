@@ -10,8 +10,8 @@ app = Flask(__name__)
 def index():
     return "selam"
 
-@app.route("/image/centered.png", methods=["GET"])
-def show_user_profile():
+@app.route("/watermark/text/<file_name>", methods=["GET"])
+def show_user_profile(file_name):
     image_url = urlparse(request.args.get("url"))
     if not image_url.geturl():
         return abort(400)
