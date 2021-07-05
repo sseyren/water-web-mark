@@ -62,19 +62,17 @@ def index():
         TextPosition=TextPosition
     )
 
-@app.route(
-    f"/watermark/{WatermarkType.TEXT.value}/<file_name>",
-    methods=["GET"]
-)
-def watermark_text(file_name):
+@app.route("/watermark/<type_path>/<file_name>", methods=["GET"])
+def watermark_text(type_path, file_name):
+    try:
+        watermark_type = WatermarkType(type_path)
+    except ValueError:
+        return abort(404)
+
     image_url = urlparse(request.args.get("url"))
     if not image_url.geturl():
         return abort(400)
 
-    text = request.args.get(
-        "content",
-        request.headers.get("Referer", image_url.hostname),
-    )
     size_ratio = float(request.args.get("size_ratio", 0.8))
     alpha = float(request.args.get("alpha", 0.5))
 
@@ -85,11 +83,36 @@ def watermark_text(file_name):
         position = TextPosition.CENTER
 
     image_request = requests.get(image_url.geturl())
-    image = watermarks.one_text(
-        bstring=image_request.content,
-        text=text,
-        position=position,
-        size_ratio=size_ratio,
-        alpha=alpha,
-    )
+    if image_request.status_code != requests.codes.ok:
+        return abort(400)
+
+    if watermark_type == WatermarkType.TEXT:
+        text = request.args.get(
+            "content",
+            request.headers.get("Referer", image_url.hostname),
+        )
+        image = watermarks.one_text(
+            bstring=image_request.content,
+            text=text,
+            position=position,
+            size_ratio=size_ratio,
+            alpha=alpha,
+        )
+    elif watermark_type == WatermarkType.IMAGE:
+        watermark_url = urlparse(request.args.get("content"))
+        if not watermark_url.geturl():
+            return abort(400)
+
+        watermark_request = requests.get(watermark_url.geturl())
+        if watermark_request.status_code != requests.codes.ok:
+            return abort(400)
+
+        image = watermarks.one_image(
+            image_bstr=image_request.content,
+            watermark_bstr=watermark_request.content,
+            position=position,
+            size_ratio=size_ratio,
+            alpha=alpha,
+        )
+
     return Response(image, mimetype="image/png")
