@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>water-web-mark | Demo</title>
+</head>
+<body>
+  <h1>Demo Sayfası: Javascript Kodu</h1>
+  <p><u>Bu demo sayfasındaki görsellerin URL adresleri Javascript kodu tarafından değiştirilir, böylece metin filigranlar eklenir.<br>Sayfanın kaynak kodu incelenebilir.</u></p>
+  <p>Filigran demo sayfaları:</p>
+  <ul>
+    <li><a href="{{ url_for('demo_page', page='no-watermark') }}">Filigran Yok</a></li>
+    <li><a href="{{ url_for('demo_page', page='text-watermark') }}">Metin Filigranlar</a></li>
+    <li><a href="{{ url_for('demo_page', page='image-watermark') }}">Görsel Filigranlar</a></li>
+    <li><a href="{{ url_for('demo_page', page='javascript-code') }}">Javascript Kodu Demosu</a></li>
+  </ul>
+  <p>Ex excepturi et deserunt quidem consequatur amet. Magnam distinctio et veniam tempora explicabo reiciendis asperiores. Quibusdam cupiditate placeat dolore iure. Architecto et dolor voluptatem sint magnam sunt. Dolores dolor et culpa corporis delectus. Quia non deleniti quis sed quia illum. Est consectetur dolore voluptate laboriosam voluptatibus omnis quasi ipsam. Alias recusandae doloribus illum in natus et harum tempora.</p>
+  <p style="text-align:center"><img src="https://picsum.photos/200/200" /><p>
+  <p>Et voluptatibus maiores iusto et. Occaecati minus debitis dolorem odit accusamus quo. Officia illo eius dolor. Mollitia quo repellat et dolorem. Aspernatur amet minus ratione. Eaque molestiae inventore natus. Ut eius soluta quisquam ducimus. Ex deleniti unde et totam numquam. Et quia ipsam possimus aut deserunt veritatis tempore. Provident dolores est ut velit nobis. Voluptas in voluptatum iure et at reprehenderit recusandae.</p>
+  <p style="text-align:center"><img src="https://picsum.photos/600/400" /><p>
+  <p>Eaque dignissimos ea dolor veritatis explicabo molestiae. Enim perspiciatis nobis enim nesciunt accusamus similique sit nulla. In quia deserunt quis fugiat. Ad aperiam est omnis et. Dolorem et neque earum rerum. Voluptates assumenda dolorum et error similique necessitatibus eos. Repudiandae odit id commodi illo et quia eos dolores. Labore amet officiis vitae. Aut placeat sit deserunt autem excepturi ut sunt. Veniam ipsa inventore autem. Est quo est dolores consequuntur inventore nihil enim dolore.</p>
+  <p style="text-align:center"><img src="https://picsum.photos/1200/120" /><p>
+  <p>Praesentium reiciendis qui dolor est numquam est. Et harum aliquam tenetur. Eos nam neque iusto exercitationem magni aut. Aliquam et est eum totam a veritatis ex. Dolorem ipsam voluptatem assumenda tempora non et atque tenetur. Sed possimus quisquam consequatur reiciendis explicabo nemo omnis. A facere eos ab occaecati tempore. Soluta excepturi minima asperiores vel magni sequi. Odit impedit rerum nobis autem. Saepe reiciendis inventore sint. Amet fugit vel dignissimos beatae. Sed molestiae et esse.</p>
+  <p style="text-align:center"><img src="https://picsum.photos/400/700" /><p>
+  <p>Voluptatem quod dolorem aut repellendus. Rerum minus est facere ut qui. Natus quia minus reprehenderit consectetur voluptas neque. Sed maxime iusto esse magnam. Doloribus ea enim adipisci quas eum non. Quibusdam consequuntur dolores ex molestiae aliquam. Odit fugiat sit ut dolores dignissimos iste sed fuga. Laudantium unde maxime blanditiis repellat quia placeat. Aliquam ut magni nihil sed. Velit alias excepturi reiciendis vel quia rerum.</p>
+
+  <script>
+  function wwm_absolutePath(wwm_href) {
+    var wwm_link = document.createElement("a");
+    wwm_link.href = wwm_href;
+    return wwm_link.href;
+  }
+  wwm_images = document.getElementsByTagName("img");
+  for (var wwm_i = 0; wwm_i < wwm_images.length; wwm_i++) {
+    wwm_new_src = encodeURIComponent(wwm_absolutePath(wwm_images[wwm_i].src));
+    wwm_images[wwm_i].src = "{{ url_for('index', _external=True) }}watermark/text/processed.png?url=" + wwm_new_src + "&position=bottom_right&size_ratio=0.5&alpha=0.7&content=water-web-mark";
+  }
+  </script>
+
+</body>
+</html>

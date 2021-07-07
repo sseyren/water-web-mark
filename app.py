@@ -1,11 +1,13 @@
 from flask import Flask, Response, render_template, abort, request
-from urllib.parse import urlparse, urlencode
+from urllib.parse import urlparse, urlencode, unquote
+from pathlib import Path
 import requests
 
 import watermarks
 from watermarks import WatermarkType, TextPosition
 
 app = Flask(__name__)
+app.jinja_env.filters['unquote'] = unquote
 
 def generate_embed_js(watermark_type:WatermarkType, hostname:str, params:dict):
     template = app.jinja_env.get_template("js_code.jinja")
@@ -116,3 +118,14 @@ def watermark_text(type_path, file_name):
         )
 
     return Response(image, mimetype="image/png")
+
+
+DEMO_PATH = Path.cwd() / "templates" / "demo"
+DEMO_NAMES = [f.name.split(".")[0] for f in DEMO_PATH.iterdir() if f.is_file()]
+
+@app.route("/demo/<page>", methods=["GET", "POST"])
+def demo_page(page):
+    if page in DEMO_NAMES:
+        return render_template(f"demo/{page}.jinja")
+    else:
+        return abort(404)
