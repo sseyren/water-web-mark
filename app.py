@@ -65,7 +65,7 @@ def index():
     )
 
 @app.route("/watermark/<type_path>/<file_name>", methods=["GET"])
-def watermark_text(type_path, file_name):
+def watermark(type_path, file_name):
     try:
         watermark_type = WatermarkType(type_path)
     except ValueError:
