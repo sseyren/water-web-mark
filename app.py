@@ -35,7 +35,7 @@ def code_generator():
     if request.method == "POST":
         try:
             watermark_type = WatermarkType(request.form.get("type"))
-        except ValueError:
+        except:
             pass
 
         if request.form.get("content"):
@@ -44,17 +44,17 @@ def code_generator():
         try:
             pos = TextPosition(request.form.get("position")).value
             params["position"] = pos
-        except ValueError:
+        except:
             pass
 
         try:
             params["size_ratio"] = float(request.form.get("size_ratio"))
-        except ValueError:
+        except:
             pass
 
         try:
             params["alpha"] = float(request.form.get("alpha"))
-        except ValueError:
+        except:
             pass
 
         generated_code = generate_embed_js(
@@ -72,20 +72,27 @@ def code_generator():
 def watermark(type_path, file_name):
     try:
         watermark_type = WatermarkType(type_path)
-    except ValueError:
+    except:
         return abort(404)
 
     image_url = urlparse(request.args.get("url"))
     if not image_url.geturl():
         return abort(400)
 
-    size_ratio = float(request.args.get("size_ratio", 0.8))
-    alpha = float(request.args.get("alpha", 0.5))
+    try:
+        size_ratio = float(request.args.get("size_ratio"))
+    except:
+        size_ratio = 0.8
+
+    try:
+        alpha = float(request.args.get("alpha"))
+    except:
+        alpha = 0.5
 
     position = request.args.get("position")
     try:
         position = TextPosition(position)
-    except ValueError:
+    except:
         position = TextPosition.CENTER
 
     image_request = requests.get(image_url.geturl())
