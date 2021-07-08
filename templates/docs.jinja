@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>water-web-mark</title>
+</head>
+
+<body>
+  <h1>Dokümantasyon</h1>
+
+  <h2><code>GET {{ url_for(
+      'watermark',
+      type_path='text',
+      file_name='<bir-dosya-ismi>',
+      url='<arka-plan-görsel-URL>'
+    )|unquote|e }}</code></h2>
+  <p><code>url</code> görseline metin filigran (<code>content</code>) ekler. PNG formatında bir görsel döndürür. <code>&lt;bir-dosya-ismi&gt;</code> kısmına herhangi bir isim yazılabilir.</p>
+  <p>Parametreler:</p>
+  <ul>
+    <li><b>url</b> (Zorunlu): Arka plan görsel URL adresi.</li>
+    <li><b>content</b>: Metin içeriği.</li>
+    <li><b>size_ratio</b>: Oransal olarak metnin büyüklüğü. 1 olursa mümkün olan en büyük metin yazdırılır. 0 olursa metin gözükmez.</li>
+    <li><b>alpha</b>: Metnin saydamlığı. 1 tamamen opak, 0 tamamen saydam.</li>
+    <li><b>position</b>: Metnin görsel üstünde konumu.<br>Şunlardan biri olabilir:
+    {% for pos in TextPosition %}<code>{{ pos.value }}</code> | {% endfor %}</li>
+  </ul>
+
+  <h2><code>GET {{ url_for(
+      'watermark',
+      type_path='image',
+      file_name='<bir-dosya-ismi>',
+      url='<arka-plan-görsel-URL>',
+      content='<filigran-görsel-URL>'
+    )|unquote|e }}</code></h2>
+  <p><code>url</code> görseline görsel filigran (<code>content</code>) ekler. PNG formatında bir görsel döndürür. <code>&lt;bir-dosya-ismi&gt;</code> kısmına herhangi bir isim yazılabilir.</p>
+  <p>Parametreler:</p>
+  <ul>
+    <li><b>url</b> (Zorunlu): Arka plan görsel URL adresi.</li>
+    <li><b>content</b> (Zorunlu): Eklenecek filigran görsel URL adresi.</li>
+    <li><b>size_ratio</b>: Oransal olarak filigran büyüklüğü. 1 olursa mümkün olan en büyük filigran eklenir. 0 olursa filigran gözükmez.</li>
+    <li><b>alpha</b>: Filigran saydamlığı. 1 tamamen opak, 0 tamamen saydam.</li>
+    <li><b>position</b>: Filigranın görsel üstünde konumu.<br>Şunlardan biri olabilir:
+    {% for pos in TextPosition %}<code>{{ pos.value }}</code> | {% endfor %}</li>
+  </ul>
+
+</body>
+
+</html>

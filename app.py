@@ -124,6 +124,10 @@ def watermark(type_path, file_name):
     return Response(image, mimetype="image/png")
 
 
+@app.route("/docs", methods=["GET"])
+def documentation():
+    return render_template('docs.jinja', TextPosition=TextPosition)
+
 DEMO_PATH = Path.cwd() / "templates" / "demo"
 DEMO_NAMES = [f.name.split(".")[0] for f in DEMO_PATH.iterdir() if f.is_file()]
 
