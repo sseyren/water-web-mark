@@ -5,72 +5,49 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>water-web-mark</title>
+  <style>
+    .image {
+      display: inline-block;
+      max-width: 400px;
+      white-space: nowrap;
+    }
+    .sign {
+      display: inline-block;
+      line-height: 400px;
+      vertical-align: top;
+      font-size: 40pt;
+    }
+  </style>
 </head>
 
-<body>
-  <h1>Oto-Filigran Kodu Üreteci</h1>
+<body style="text-align: center">
+  <h1>Görsellere Filigran Uygulayan Web Uygulaması</h1>
+  <h3><a href="https://github.com/thesseyren/water-web-mark" target="_blank">water-web-mark</a></h3>
   <p>
-    Web sayfanızdaki görsellere otomatik olarak filigran yerleştirebilirsiniz.<br>
-    Bunun için aşağıdaki formu doldurun ve (üretilecek) kodu web sayfanıza yapıştırın.
+    Görsellerin üstüne saydam yazı/görsel ekleyen bir web uygulamasıdır.<br>
+    Görsellerin URL adreslerini (ve bazı ek parametreleri) alır, bunları kullanarak yeni görsel üretir.
   </p>
-  <form method="POST">
-    <p>
-      <label>Görsele eklenecek filigran tipini seçin:</label><br>
-      <input type="radio" name="type" value="text" {{ "checked" if watermark_type == "text" }} />
-      <label>Metin</label><br>
-      <input type="radio" name="type" value="image" {{ "checked" if watermark_type == "image" }} />
-      <label>Görsel</label><br>
-    </p>
-    <p>
-      <label>
-        Filigran içeriğini girin:<br>
-        <small><i>Filigran tipini metin seçtiyseniz buraya metin girilebilir.</i></small><br>
-        <small><i>Metin girmeniz zorunlu değil, otomatik metinden memnun değilseniz değiştirebilirsiniz.</i></small><br>
-        <small><i>Filigran tipini görsel seçtiyseniz görselin URL'sini girmelisiniz.</i></small>
-      </label>
-      <br>
-      <input type="text" name="content" value="{{ params.content }}" /><br>
-    </p>
-    <p>
-      <label>Filigran pozisyonu:</label><br>
-      {% for pos in TextPosition %}
-      <input
-        type="radio"
-        name="position"
-        value="{{ pos.value }}"
-        {{ "checked" if params.position == pos.value }} 
-      />
-      {% if loop.index is divisibleby(3) %}<br>{% endif %}
-      {% endfor %}
-    </p>
-    <p>
-      <label>
-        Boyut oranı (0-1 arası değerler):<br>
-        <small><i>Filigranın büyüklüğünü oransal olarak ayarlayın.</i></small>
-      </label>
-      <br>
-      <input type="number" name="size_ratio" min="0" max="1" step="0.01" value="{{ params.size_ratio }}" /><br>
-    </p>
-    <p>
-      <label>
-        Saydamlık (0-1 arası değerler):<br>
-        <small><i>1: tamamen opak (filigranın arkası gözükmez)</i></small><br>
-        <small><i>0: tamamen saydam (filigran gözükmez)</i></small>
-      </label>
-      <br>
-      <input type="number" name="alpha" min="0" max="1" step="0.01" value="{{ params.alpha }}" /><br>
-    </p>
-    <p>
-      <input type="submit" value="Kodu Üret" />
-    </p>
-  </form>
-  {% if generated_code %}
-  <hr>
-  <p>
-    <label>Bu kodu html sayfanızın <code>&lt;body&gt;</code> etiketinin sonuna ekleyin:</label><br>
-    <textarea rows="14" cols="150" readonly>{{ generated_code }}</textarea>
-  </p>
-  {% endif %}
+
+  <div class="image">
+    {% set background = url_for('static', filename='intro.png', _external=True) %}
+    <img src="{{ background }}" height="400" /><br>
+    <code>src="{{ background|unquote }}"</code>
+  </div>
+  <div class="sign">+</div>
+  <div class="image">
+    {% set tux = url_for('static', filename='tux.png', _external=True) %}
+    <img src="{{ tux }}" height="400" /><br>
+    <code>src="{{ tux|unquote }}"</code>
+  </div>
+  <div class="sign">=</div>
+  <div class="image">
+    {% set result = url_for('watermark', type_path="image", file_name="output.png", url=background, content=tux, _external=True) %}
+    <img src="{{ result }}" height="400" /><br>
+    <code>src="{{ result|unquote }}"</code>
+  </div>
+
+  <p>Örnekleri incelemek için <a href="{{ url_for('demo_page', page='no-watermark') }}">demo sayfalarını ziyaret edin.</a></p>
+  <p>Blog sitenizde kullandığınız görsellere <a href="{{ url_for('code_generator') }}">otomatik olarak filigran uygulayın.</a></p>
 </body>
 
 </html>

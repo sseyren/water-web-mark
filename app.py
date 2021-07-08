@@ -18,8 +18,12 @@ def generate_embed_js(watermark_type:WatermarkType, hostname:str, params:dict):
         query=urlencode(params),
     )
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def index():
+    return render_template("index.jinja")
+
+@app.route("/code-gen", methods=["GET", "POST"])
+def code_generator():
     watermark_type = WatermarkType.TEXT
     params = {
         "position": TextPosition.CENTER.value,
@@ -57,7 +61,7 @@ def index():
             watermark_type, request.host_url[0:-1], params)
 
     return render_template(
-        "index.jinja",
+        "code_generator.jinja",
         watermark_type=watermark_type.value,
         params=params,
         generated_code=generated_code,
